@@ -1,0 +1,158 @@
+# .github/workflows/classroom.yml
+
+name: Autograding Tests
+on: [push, workflow_dispatch, repository_dispatch]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      # Step 1: Checkout the student's code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Specify a Python version
+
+      # Step 3: Run Sub-Task 1 Tests (Variables)
+      - name: Sub-Task 1 - Test Name Variable
+        id: test-variables-name
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 1 - Test Name Variable
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_variables_name'
+          points: 5
+
+      - name: Sub-Task 1 - Test Age Calculation
+        id: test-variables-double-age
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 1 - Test Age Calculation
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_variables_double_age'
+          points: 5
+
+      - name: Sub-Task 1 - Test Height Calculation
+        id: test-variables-height-cm
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 1 - Test Height Calculation
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_variables_height_cm'
+          points: 5
+
+      - name: Sub-Task 1 - Test Rectangle Area
+        id: test-variables-rect-area
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 1 - Test Rectangle Area
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_variables_rect_area'
+          points: 5
+
+      # Step 4: Run Sub-Task 2 Tests (I/O)
+      - name: Sub-Task 2 - Test Greeting
+        id: test-io-greeting
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 2 - Test Greeting
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_io_greeting'
+          points: 5
+
+      - name: Sub-Task 2 - Test Age Output
+        id: test-io-age
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 2 - Test Age Output
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_io_age'
+          points: 5
+
+      - name: Sub-Task 2 - Test Sum (Nominal)
+        id: test-io-sum-nominal
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 2 - Test Sum (Nominal)
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_io_sum_nominal'
+          points: 5
+
+      # Step 5: Run Sub-Task 3 Tests (Shape Calculator)
+      - name: Sub-Task 3 - Test Circle Area
+        id: test-shape-circle
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 3 - Test Circle Area
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_shape_circle'
+          points: 10
+
+      - name: Sub-Task 3 - Test Rectangle Area
+        id: test-shape-rectangle
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 3 - Test Rectangle Area
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_shape_rectangle'
+          points: 10
+
+      - name: Sub-Task 3 - Test Triangle Area
+        id: test-shape-triangle
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Sub-Task 3 - Test Triangle Area
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_shape_triangle'
+          points: 10
+
+      # Step 6: Run Homework Tests (Basic Calculator)
+      - name: Homework - Test Addition
+        id: test-calculator-addition
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Homework - Test Addition
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_calculator_addition'
+          points: 5
+
+      - name: Homework - Test Subtraction
+        id: test-calculator-subtraction
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Homework - Test Subtraction
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_calculator_subtraction'
+          points: 5
+
+      - name: Homework - Test Multiplication
+        id: test-calculator-multiplication
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Homework - Test Multiplication
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_calculator_multiplication'
+          points: 5
+
+      - name: Homework - Test Division
+        id: test-calculator-division
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Homework - Test Division
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_calculator_division'
+          points: 5
+
+      - name: Homework - Test Division by Zero
+        id: test-calculator-division-by-zero
+        uses: education/autograding-test-reporter@v1
+        with:
+          test-name: Homework - Test Division by Zero
+          command: 'python3 -m unittest tests.TestDay1Subtasks.test_calculator_division_by_zero'
+          points: 10 # More points for handling an edge case
+
+      # Step 7: Final summary of points
+      - name: Autograding Reporter
+        uses: education/autograding-grader-results@v1
+        with:
+          # The total points for the assignment is 100
+          # The reporter will sum up the points from each step above
+          # and publish the final grade.
+          token: ${{ secrets.GITHUB_TOKEN }}
